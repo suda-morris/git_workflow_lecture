@@ -1,0 +1,646 @@
+<!DOCTYPE html><html lang="en-US"><head><title>Git &amp; Workflow</title><meta property="og:title" content="Git &amp; Workflow"><meta name="description" content="Introduction of the Git Workflow in Espressif"><meta property="og:description" content="Introduction of the Git Workflow in Espressif"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><style>@media screen{body,html{background:#000;height:100%;margin:0;overflow:hidden}[data-bespoke-marp-fragment=inactive]{visibility:hidden}.bespoke-marp-osc{display:none;opacity:0}.bespoke-marp-parent{bottom:0;left:0;position:absolute;right:0;top:0}.bespoke-marp-parent>.bespoke-marp-osc{background:rgba(0,0,0,.65);border-radius:7px;bottom:50px;color:#fff;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;left:50%;line-height:0;opacity:1;padding:12px;position:absolute;touch-action:manipulation;-webkit-transform:translateX(-50%);transform:translateX(-50%);-webkit-transition:opacity .2s linear;transition:opacity .2s linear;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap;z-index:1}.bespoke-marp-parent>.bespoke-marp-osc>*{margin-left:6px}.bespoke-marp-parent>.bespoke-marp-osc>:first-child{margin-left:0}.bespoke-marp-parent>.bespoke-marp-osc>span{opacity:.8}.bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page]{display:inline-block;min-width:140px;text-align:center}.bespoke-marp-parent>.bespoke-marp-osc>button{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:transparent;border:0;color:inherit;cursor:pointer;font-size:inherit;opacity:.8;outline:none;padding:0;-webkit-transition:opacity .2s linear;transition:opacity .2s linear;-webkit-tap-highlight-color:transparent}.bespoke-marp-parent>.bespoke-marp-osc>button:disabled{cursor:not-allowed;opacity:.15!important}.bespoke-marp-parent>.bespoke-marp-osc>button:hover{opacity:1}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:active{opacity:.6}.bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled){-webkit-transition:none;transition:none}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNNjggOTBMMjggNTBsNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNMzIgOTBsNDAtNDAtNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen]{background:transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTQwIDcwSDIwVjUwbTIwIDBMMjAgNzBtNDAtNDBoMjB2MjBtLTIwIDBsMjAtMjAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;height:32px;overflow:hidden;text-indent:100%;white-space:nowrap;width:32px}.bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen].exit{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IGNsYXNzPSJhIiB4PSIxMCIgeT0iMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjUuNjciLz48cGF0aCBjbGFzcz0iYSIgZD0iTTIwIDUwaDIwdjIwbS0yMCAwbDIwLTIwbTQwIDBINjBWMzBtMjAgMEw2MCA1MCIvPjwvc3ZnPg==")}.bespoke-marp-parent.bespoke-marp-inactive{cursor:none}.bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc{opacity:0;pointer-events:none}svg.bespoke-marp-slide{height:100%;left:0;pointer-events:none;position:absolute;top:0;width:100%;z-index:-1}svg.bespoke-marp-slide.bespoke-marp-active{pointer-events:auto;z-index:0}.bespoke-progress-parent{background:#222;display:-webkit-box;display:flex;height:5px;width:100%}.bespoke-progress-parent+.bespoke-marp-parent{top:5px}.bespoke-progress-parent .bespoke-progress-bar{-webkit-box-flex:0;flex:0 0 0;background:#0288d1;-webkit-transition:-webkit-flex-basis .2s cubic-bezier(0,1,1,1);transition:-webkit-flex-basis .2s cubic-bezier(0,1,1,1);transition:flex-basis .2s cubic-bezier(0,1,1,1);transition:flex-basis .2s cubic-bezier(0,1,1,1),-webkit-flex-basis .2s cubic-bezier(0,1,1,1)}}@media print{.bespoke-marp-osc,.bespoke-progress-parent{display:none!important;-webkit-transition:none!important;transition:none!important}.bespoke-marp-parent{top:0}}</style><style>article#presentation > svg > foreignObject > section {
+  width: 1280px;
+  height: 720px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+
+  scroll-snap-align: center center;
+}article#presentation > svg > foreignObject > section::after {
+  bottom: 0;
+  content: attr(data-marpit-pagination);
+  padding: inherit;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}article#presentation > svg > foreignObject > section:not([data-marpit-pagination])::after {
+  display: none;
+}/* Normalization */article#presentation > svg > foreignObject > section h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}@page {
+  size: 1280px 720px;
+  margin: 0;
+}@media print {html, body {
+  background-color: #fff;
+  margin: 0;
+  page-break-inside: avoid;
+  break-inside: avoid-page;
+}
+  article#presentation > svg > foreignObject > section {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  article#presentation > svg > foreignObject > section, article#presentation > svg > foreignObject > section * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  article#presentation > svg[data-marpit-svg] {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+  }
+}article#presentation > svg > foreignObject > section svg[data-marp-fitting=svg]{display:block;height:auto;width:100%}@supports (-ms-ime-align:auto){article#presentation > svg > foreignObject > section svg[data-marp-fitting=svg]{position:static}}article#presentation > svg > foreignObject > section svg[data-marp-fitting=svg].__reflow__{content:""}@supports (-ms-ime-align:auto){article#presentation > svg > foreignObject > section svg[data-marp-fitting=svg].__reflow__{position:relative}}article#presentation > svg > foreignObject > section [data-marp-fitting-svg-content]{display:table;white-space:nowrap}article#presentation > svg > foreignObject > section [data-marp-fitting-svg-content-wrap]{white-space:pre}article#presentation > svg > foreignObject > section img[data-marp-twemoji]{background:transparent;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em;width:1em}/*!
+ * Marp / Marpit Uncover theme
+ *
+ * @theme uncover
+ * @author Yuki Hattori
+ *
+ * @auto-scaling fittingHeader,math
+ * @size 4:3 960px 720px
+ */article#presentation > svg > foreignObject > section{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;font-size:40px;height:720px;-webkit-justify-content:center;justify-content:center;letter-spacing:3px;line-height:1.4;padding:30px 70px;position:relative;text-align:center;width:1280px;z-index:0;background:#fdfcff;color:#202228}article#presentation > svg > foreignObject > section:after{-webkit-align-items:flex-end;align-items:flex-end;display:-webkit-flex;display:flex;font-size:.6em;height:80px;-webkit-justify-content:flex-end;justify-content:flex-end;padding:30px;text-align:right;width:80px}article#presentation > svg > foreignObject > section:after{background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1 1" width="1" height="1"><path d="M0 1h1v-1Z" fill="rgba(32, 34, 40, 0.05)"/></svg>') no-repeat 50%;background-size:cover;color:#202228;text-shadow:0 0 5px #fdfcff}article#presentation > svg > foreignObject > section code,article#presentation > svg > foreignObject > section pre{background:#f2f1f4;color:#202228}article#presentation > svg > foreignObject > section a{color:#009dd5}article#presentation > svg > foreignObject > section a:hover{color:#087eaa}article#presentation > svg > foreignObject > section h1 strong,article#presentation > svg > foreignObject > section h2 strong,article#presentation > svg > foreignObject > section h3 strong,article#presentation > svg > foreignObject > section h4 strong,article#presentation > svg > foreignObject > section h5 strong,article#presentation > svg > foreignObject > section h6 strong{color:#33b1dd}article#presentation > svg > foreignObject > section footer,article#presentation > svg > foreignObject > section header{color:rgba(32,34,40,.4);text-shadow:0 1px 0 rgba(253,252,255,.8)}article#presentation > svg > foreignObject > section mark{color:#009dd5;background:transparent}article#presentation > svg > foreignObject > section:not(.invert) .hljs{display:block;overflow-x:auto;padding:.5em;background:#fff}article#presentation > svg > foreignObject > section:not(.invert) .hljs,article#presentation > svg > foreignObject > section:not(.invert) .hljs-subst{color:#000}article#presentation > svg > foreignObject > section:not(.invert) .hljs-addition,article#presentation > svg > foreignObject > section:not(.invert) .hljs-meta,article#presentation > svg > foreignObject > section:not(.invert) .hljs-string,article#presentation > svg > foreignObject > section:not(.invert) .hljs-symbol,article#presentation > svg > foreignObject > section:not(.invert) .hljs-template-tag,article#presentation > svg > foreignObject > section:not(.invert) .hljs-template-variable{color:#756bb1}article#presentation > svg > foreignObject > section:not(.invert) .hljs-comment,article#presentation > svg > foreignObject > section:not(.invert) .hljs-quote{color:#636363}article#presentation > svg > foreignObject > section:not(.invert) .hljs-bullet,article#presentation > svg > foreignObject > section:not(.invert) .hljs-link,article#presentation > svg > foreignObject > section:not(.invert) .hljs-literal,article#presentation > svg > foreignObject > section:not(.invert) .hljs-number,article#presentation > svg > foreignObject > section:not(.invert) .hljs-regexp{color:#31a354}article#presentation > svg > foreignObject > section:not(.invert) .hljs-deletion,article#presentation > svg > foreignObject > section:not(.invert) .hljs-variable{color:#88f}article#presentation > svg > foreignObject > section:not(.invert) .hljs-built_in,article#presentation > svg > foreignObject > section:not(.invert) .hljs-doctag,article#presentation > svg > foreignObject > section:not(.invert) .hljs-keyword,article#presentation > svg > foreignObject > section:not(.invert) .hljs-name,article#presentation > svg > foreignObject > section:not(.invert) .hljs-section,article#presentation > svg > foreignObject > section:not(.invert) .hljs-selector-class,article#presentation > svg > foreignObject > section:not(.invert) .hljs-selector-id,article#presentation > svg > foreignObject > section:not(.invert) .hljs-selector-tag,article#presentation > svg > foreignObject > section:not(.invert) .hljs-strong,article#presentation > svg > foreignObject > section:not(.invert) .hljs-tag,article#presentation > svg > foreignObject > section:not(.invert) .hljs-title,article#presentation > svg > foreignObject > section:not(.invert) .hljs-type{color:#3182bd}article#presentation > svg > foreignObject > section:not(.invert) .hljs-emphasis{font-style:italic}article#presentation > svg > foreignObject > section:not(.invert) .hljs-attribute{color:#e6550d}article#presentation > svg > foreignObject > section.invert{background:#202228;color:#fff}article#presentation > svg > foreignObject > section.invert:after{background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1 1" width="1" height="1"><path d="M0 1h1v-1Z" fill="rgba(255, 255, 255, 0.05)"/></svg>') no-repeat 50%;background-size:cover;color:#fff;text-shadow:0 0 5px #202228}article#presentation > svg > foreignObject > section.invert code,article#presentation > svg > foreignObject > section.invert pre{background:#2b2d33;color:#fff}article#presentation > svg > foreignObject > section.invert a{color:#60d0f0}article#presentation > svg > foreignObject > section.invert a:hover{color:#88dcf4}article#presentation > svg > foreignObject > section.invert h1 strong,article#presentation > svg > foreignObject > section.invert h2 strong,article#presentation > svg > foreignObject > section.invert h3 strong,article#presentation > svg > foreignObject > section.invert h4 strong,article#presentation > svg > foreignObject > section.invert h5 strong,article#presentation > svg > foreignObject > section.invert h6 strong{color:#80d9f3}article#presentation > svg > foreignObject > section.invert footer,article#presentation > svg > foreignObject > section.invert header{color:hsla(0,0%,100%,.4);text-shadow:0 1px 0 rgba(32,34,40,.8)}article#presentation > svg > foreignObject > section.invert mark{color:#60d0f0;background:transparent}article#presentation > svg > foreignObject > section.invert .hljs{display:block;overflow-x:auto;padding:.5em;background:#222;color:#fff}article#presentation > svg > foreignObject > section.invert .hljs-comment,article#presentation > svg > foreignObject > section.invert .hljs-quote{color:#777}article#presentation > svg > foreignObject > section.invert .hljs-built_in,article#presentation > svg > foreignObject > section.invert .hljs-builtin-name,article#presentation > svg > foreignObject > section.invert .hljs-bullet,article#presentation > svg > foreignObject > section.invert .hljs-deletion,article#presentation > svg > foreignObject > section.invert .hljs-link,article#presentation > svg > foreignObject > section.invert .hljs-literal,article#presentation > svg > foreignObject > section.invert .hljs-meta,article#presentation > svg > foreignObject > section.invert .hljs-number,article#presentation > svg > foreignObject > section.invert .hljs-params,article#presentation > svg > foreignObject > section.invert .hljs-regexp,article#presentation > svg > foreignObject > section.invert .hljs-symbol,article#presentation > svg > foreignObject > section.invert .hljs-tag,article#presentation > svg > foreignObject > section.invert .hljs-template-variable,article#presentation > svg > foreignObject > section.invert .hljs-variable{color:#ab875d}article#presentation > svg > foreignObject > section.invert .hljs-attribute,article#presentation > svg > foreignObject > section.invert .hljs-name,article#presentation > svg > foreignObject > section.invert .hljs-section,article#presentation > svg > foreignObject > section.invert .hljs-selector-class,article#presentation > svg > foreignObject > section.invert .hljs-selector-id,article#presentation > svg > foreignObject > section.invert .hljs-title,article#presentation > svg > foreignObject > section.invert .hljs-type{color:#9b869b}article#presentation > svg > foreignObject > section.invert .hljs-addition,article#presentation > svg > foreignObject > section.invert .hljs-keyword,article#presentation > svg > foreignObject > section.invert .hljs-selector-tag,article#presentation > svg > foreignObject > section.invert .hljs-string{color:#8f9c6c}article#presentation > svg > foreignObject > section.invert .hljs-emphasis{font-style:italic}article#presentation > svg > foreignObject > section.invert .hljs-strong{font-weight:700}article#presentation > svg > foreignObject > section>:first-child,article#presentation > svg > foreignObject > section[data-header]>:nth-child(2){margin-top:0}article#presentation > svg > foreignObject > section>:last-child,article#presentation > svg > foreignObject > section[data-footer]>:nth-last-child(2){margin-bottom:0}article#presentation > svg > foreignObject > section svg[data-marp-fitting=svg]{max-height:660px;--preserve-aspect-ratio:xMidYMid meet}article#presentation > svg > foreignObject > section blockquote,article#presentation > svg > foreignObject > section p{margin:0 0 15px}article#presentation > svg > foreignObject > section h1,article#presentation > svg > foreignObject > section h2,article#presentation > svg > foreignObject > section h3,article#presentation > svg > foreignObject > section h4,article#presentation > svg > foreignObject > section h5,article#presentation > svg > foreignObject > section h6{margin:15px 0 30px}article#presentation > svg > foreignObject > section h1 strong,article#presentation > svg > foreignObject > section h2 strong,article#presentation > svg > foreignObject > section h3 strong,article#presentation > svg > foreignObject > section h4 strong,article#presentation > svg > foreignObject > section h5 strong,article#presentation > svg > foreignObject > section h6 strong{font-weight:inherit}article#presentation > svg > foreignObject > section h1{font-size:2em}article#presentation > svg > foreignObject > section h2{font-size:1.7em}article#presentation > svg > foreignObject > section h3{font-size:1.4em;letter-spacing:2px}article#presentation > svg > foreignObject > section h4{font-size:1.2em;letter-spacing:2px}article#presentation > svg > foreignObject > section h5{font-size:1em;letter-spacing:1px}article#presentation > svg > foreignObject > section h6{font-size:.8em;letter-spacing:1px}article#presentation > svg > foreignObject > section footer,article#presentation > svg > foreignObject > section header{position:absolute;z-index:1;left:70px;right:70px;font-size:.45em;letter-spacing:1px}article#presentation > svg > foreignObject > section header{top:30px}article#presentation > svg > foreignObject > section footer{bottom:30px}article#presentation > svg > foreignObject > section a{text-decoration:none}article#presentation > svg > foreignObject > section a:hover{text-decoration:underline}article#presentation > svg > foreignObject > section ol,article#presentation > svg > foreignObject > section ul{margin:0 auto;text-align:left}article#presentation > svg > foreignObject > section>ol,article#presentation > svg > foreignObject > section>ul{margin-bottom:15px}article#presentation > svg > foreignObject > section code,article#presentation > svg > foreignObject > section pre{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;letter-spacing:0;margin:-.2em .2em .2em;padding:.2em}article#presentation > svg > foreignObject > section pre{box-shadow:0 4px 8px rgba(0,0,0,.2);font-size:70%;line-height:1.15;margin:15px auto 30px;min-width:40%;padding:.4em .6em;text-align:left}article#presentation > svg > foreignObject > section pre>code{margin:0;padding:0}article#presentation > svg > foreignObject > section table{border-collapse:collapse;margin:0 auto 15px}article#presentation > svg > foreignObject > section table>tbody>tr>td,article#presentation > svg > foreignObject > section table>tbody>tr>th,article#presentation > svg > foreignObject > section table>thead>tr>td,article#presentation > svg > foreignObject > section table>thead>tr>th{padding:.15em .5em}article#presentation > svg > foreignObject > section table>thead>tr>td,article#presentation > svg > foreignObject > section table>thead>tr>th{border-bottom:3px solid}article#presentation > svg > foreignObject > section table>tbody>tr:not(:last-child)>td,article#presentation > svg > foreignObject > section table>tbody>tr:not(:last-child)>th{border-bottom:1px solid}article#presentation > svg > foreignObject > section blockquote{font-size:90%;line-height:1.3;padding:0 2em;position:relative;z-index:0}article#presentation > svg > foreignObject > section blockquote:after,article#presentation > svg > foreignObject > section blockquote:before{content:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNDQgMTkuM0wzOC45NCAwQzguMTQgOS41OSAwIDQwLjA1IDAgNTQuODNWMTAwaDQxLjQ3VjU0LjgzaC0yM2MtLjA0LS4yOC4yNS0yNy42NiAyNS41My0zNS41M3ptNTYgMEw5NC45NCAwQzY0LjE0IDkuNTkgNTYgNDAuMDUgNTYgNTQuODNWMTAwaDQxLjQ3VjU0LjgzaC0yM2MtLjA0LS4yOC4yNS0yNy42NiAyNS41My0zNS41M3oiIGZpbGw9IiM4ODgiIG9wYWNpdHk9Ii4zMyIvPjwvc3ZnPg==");height:auto;pointer-events:none;position:absolute;width:1em;z-index:-1}article#presentation > svg > foreignObject > section blockquote:before{left:0;top:0}article#presentation > svg > foreignObject > section blockquote:after{bottom:0;right:0;-webkit-transform:rotate(180deg);transform:rotate(180deg)}article#presentation > svg > foreignObject > section blockquote>:last-child{margin-bottom:0}article#presentation > svg > foreignObject > section[data-marpit-scope-efkgAb5p] code { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-scope-1wfwFLx2] code { font-size: 60%; }article#presentation > svg > foreignObject > section[data-marpit-scope-1lXnkbMO] code { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-scope-iecaxxv0] table { font-size: 90%; }article#presentation > svg > foreignObject > section[data-marpit-scope-gnYMxRe4] table { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-scope-7PZP3irt] table { font-size: 70%; }article#presentation > svg > foreignObject > section[data-marpit-scope-kIpQDEpO] table { font-size: 70%; }article#presentation > svg > foreignObject > section[data-marpit-scope-f6vS1ZR1] table { font-size: 70%; }article#presentation > svg > foreignObject > section[data-marpit-scope-TozI6HxY] code { font-size: 40%; }article#presentation > svg > foreignObject > section[data-marpit-scope-W4JDBwgp] code { font-size: 50%; }article#presentation > svg > foreignObject > section[data-marpit-scope-cDMT8Lkf] code { font-size: 70%; }article#presentation > svg > foreignObject > section[data-marpit-scope-qcAdvBM6] code { font-size: 70%;}article#presentation > svg > foreignObject > section[data-marpit-scope-kKW0K1T4] li { font-size: 70%;}article#presentation > svg > foreignObject > section[data-marpit-scope-9niibZSG] code { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-scope-9niibZSG] li { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-scope-VSwXiItl] li { font-size: 80%; }article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"] {
+  padding: 0 !important;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"]::before,
+article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"]::after,
+article#presentation > svg > foreignObject > section[data-marpit-advanced-background="content"]::before,
+article#presentation > svg > foreignObject > section[data-marpit-advanced-background="content"]::after {
+  display: none !important;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container] {
+  all: initial;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container][data-marpit-advanced-background-direction="vertical"] {
+  flex-direction: column;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split] > div[data-marpit-advanced-background-container] {
+  width: var(--marpit-advanced-background-split, 50%);
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="right"] > div[data-marpit-advanced-background-container] {
+  margin-left: calc(100% - var(--marpit-advanced-background-split, 50%));
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container] > figure {
+  all: initial;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  flex: auto;
+  margin: 0;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="content"],
+article#presentation > svg > foreignObject > section[data-marpit-advanced-background="pseudo"] {
+  background: transparent !important;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background="pseudo"],
+article#presentation > svg[data-marpit-svg] > foreignObject[data-marpit-advanced-background="pseudo"] {
+  pointer-events: none !important;
+}article#presentation > svg > foreignObject > section[data-marpit-advanced-background-split] {
+  width: 100%;
+  height: 100%;
+}</style></head><body><div class="bespoke-marp-osc"><button data-bespoke-marp-osc="prev" tabindex="-1" title="Previous slide">Previous slide</button><span data-bespoke-marp-osc="page"></span><button data-bespoke-marp-osc="next" tabindex="-1" title="Next slide">Next slide</button><button data-bespoke-marp-osc="fullscreen" tabindex="-1" title="Toggle fullscreen (f)">Toggle fullscreen</button></div><article id="presentation"><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-footer="**Espressif Systems Confidential**" data-theme="uncover" style="--footer:**Espressif Systems Confidential**;--theme:uncover;" data-marpit-advanced-background="background"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/background.svg&quot;);"></figure></div></section></foreignObject><foreignObject width="1280" height="720"><section id="1" data-footer="**Espressif Systems Confidential**" data-theme="uncover" style="--footer:**Espressif Systems Confidential**;--theme:uncover;" data-marpit-advanced-background="content">
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Git &amp; Workflow</span></foreignObject></svg></h1>
+<h2><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Introduction of the Git Workflow in Espressif</span></foreignObject></svg></h2>
+<p><img class="emoji" draggable="false" alt="💕" src="https://twemoji.maxcdn.com/2/svg/1f495.svg" data-marp-twemoji=""/> 𝙸𝙳𝙵 𝙲𝙾𝚁𝙴 𝚃𝙴𝙰𝙼 <img class="emoji" draggable="false" alt="💕" src="https://twemoji.maxcdn.com/2/svg/1f495.svg" data-marp-twemoji=""/></p>
+<footer><strong>Espressif Systems Confidential</strong></footer>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="2" data-background-color="#E0E0E0" data-theme="uncover" style="--background-color:#E0E0E0;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<h1>Overview <img class="emoji" draggable="false" alt="📖" src="https://twemoji.maxcdn.com/2/svg/1f4d6.svg" data-marp-twemoji=""/></h1>
+
+<ul>
+<li>What is VCS, Git, Smart Git, GitHub, GitLab ...</li>
+<li>How to get started with Git</li>
+<li>How to submit Merge Request</li>
+</ul>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="3" data-background-color="#E0E0E0" data-background-image="linear-gradient(to bottom, #880E4F, #EC407A)" data-color="white" data-theme="uncover" style="--background-color:#E0E0E0;--background-image:linear-gradient(to bottom, #880E4F, #EC407A);--color:white;--theme:uncover;color:white;background-color:#E0E0E0;background-image:linear-gradient(to bottom, #880E4F, #EC407A);background-position:center;background-repeat:no-repeat;background-size:cover;">
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Introduction of Git <img class="emoji" draggable="false" alt="🥇" src="https://twemoji.maxcdn.com/2/svg/1f947.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**VCS**" data-theme="uncover" data-marpit-pagination="4" style="--background-color:#E0E0E0;--paginate:true;--header:**VCS**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/vcs.svg&quot;);background-size:70%;"></figure></div></section></foreignObject><foreignObject width="60%" height="720" x="40%"><section id="4" data-background-color="#E0E0E0" data-paginate="true" data-header="**VCS**" data-theme="uncover" data-marpit-pagination="4" style="--background-color:#E0E0E0;--paginate:true;--header:**VCS**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>VCS</strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <img class="emoji" draggable="false" alt="👈🏿" src="https://twemoji.maxcdn.com/2/svg/1f448-1f3ff.svg" data-marp-twemoji=""/> A Simple Version Control System (VCS) <img class="emoji" draggable="false" alt="🙈" src="https://twemoji.maxcdn.com/2/svg/1f648.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+<ul>
+<li>Efficiency <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></li>
+<li>Speed <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></li>
+<li>Conflict <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></li>
+</ul>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="4"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Git**" data-theme="uncover" data-marpit-pagination="5" style="--background-color:#E0E0E0;--paginate:true;--header:**Git**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:50%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="right"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;./assets/git.svg&quot;);background-size:70%;"></figure></div></section></foreignObject><foreignObject width="50%" height="720"><section id="5" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git**" data-theme="uncover" data-marpit-pagination="5" style="--background-color:#E0E0E0;--paginate:true;--header:**Git**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:50%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
+<header><strong>Git</strong></header>
+
+<blockquote>
+<p><a href="https://git-scm.com/">Git</a> is a free and open source <strong>distributed</strong> version control system with <em>speed</em> and <em>efficiency</em></p>
+</blockquote>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="5"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Repository**" data-footer="[GitHub](https://github.com/espressif/esp-idf) 💗 [GitLab](https://gitlab.espressif.cn:6688/espressif/esp-idf)" data-theme="uncover" data-marpit-pagination="6" style="--background-color:#E0E0E0;--paginate:true;--header:**Repository**;--footer:[GitHub](https://github.com/espressif/esp-idf) 💗 [GitLab](https://gitlab.espressif.cn:6688/espressif/esp-idf);--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:35%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="right"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/github.svg&quot;);background-size:auto;"></figure><figure style="background-image:url(&quot;assets/gitlab.svg&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="65%" height="720"><section id="6" data-background-color="#E0E0E0" data-paginate="true" data-header="**Repository**" data-footer="[GitHub](https://github.com/espressif/esp-idf) 💗 [GitLab](https://gitlab.espressif.cn:6688/espressif/esp-idf)" data-theme="uncover" data-marpit-pagination="6" style="--background-color:#E0E0E0;--paginate:true;--header:**Repository**;--footer:[GitHub](https://github.com/espressif/esp-idf) 💗 [GitLab](https://gitlab.espressif.cn:6688/espressif/esp-idf);--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:35%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="right">
+<header><strong>Repository</strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content>GitHub <img class="emoji" draggable="false" alt="🆚" src="https://twemoji.maxcdn.com/2/svg/1f19a.svg" data-marp-twemoji=""/> GitLab</span></foreignObject></svg></h1>
+<ul>
+<li>Web-based Git repository</li>
+<li>Issue tracking</li>
+<li>GitLab: built-in <strong>CI/CD</strong></li>
+<li>GitHub: community <strong>PR</strong></li>
+</ul>
+<footer><a href="https://github.com/espressif/esp-idf">GitHub</a> <img class="emoji" draggable="false" alt="💗" src="https://twemoji.maxcdn.com/2/svg/1f497.svg" data-marp-twemoji=""/> <a href="https://gitlab.espressif.cn:6688/espressif/esp-idf">GitLab</a></footer>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="6"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Git GUI**" data-footer="[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/)" data-theme="uncover" data-marpit-pagination="7" style="--background-color:#E0E0E0;--paginate:true;--header:**Git GUI**;--footer:[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/);--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="background"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/smartgit.png&quot;);background-size:90%;"></figure><figure style="background-image:url(&quot;assets/sourcetree.png&quot;);background-size:90%;"></figure></div></section></foreignObject><foreignObject width="1280" height="720"><section id="7" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git GUI**" data-footer="[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/)" data-theme="uncover" data-marpit-pagination="7" style="--background-color:#E0E0E0;--paginate:true;--header:**Git GUI**;--footer:[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/);--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="content">
+<header><strong>Git GUI</strong></header>
+<footer><a href="https://www.syntevo.com/smartgit/">SmartGit</a> <img class="emoji" draggable="false" alt="💗" src="https://twemoji.maxcdn.com/2/svg/1f497.svg" data-marp-twemoji=""/> <a href="https://www.sourcetreeapp.com/">Sourcetree</a></footer>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="7"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="8" data-background-color="#E0E0E0" data-background-image="linear-gradient(to bottom, #2E7D32, #00E676)" data-color="white" data-theme="uncover" style="--background-color:#E0E0E0;--background-image:linear-gradient(to bottom, #2E7D32, #00E676);--color:white;--theme:uncover;color:white;background-color:#E0E0E0;background-image:linear-gradient(to bottom, #2E7D32, #00E676);background-position:center;background-repeat:no-repeat;background-size:cover;">
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Get Started with Git <img class="emoji" draggable="false" alt="🐾" src="https://twemoji.maxcdn.com/2/svg/1f43e.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-marpit-scope-efkgAb5p="" data-background-color="#E0E0E0" data-paginate="true" data-header="Let Git Track Project 🚜" data-theme="uncover" data-marpit-pagination="9" style="--background-color:#E0E0E0;--paginate:true;--header:Let Git Track Project 🚜;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header>Let Git Track Project <img class="emoji" draggable="false" alt="🚜" src="https://twemoji.maxcdn.com/2/svg/1f69c.svg" data-marp-twemoji=""/></header>
+<pre><code class="language-bash">morris:~/Desktop$ mkdir oh_my_project
+morris:~/Desktop$ <span class="hljs-built_in">cd</span> oh_my_project/
+morris:~/Desktop/oh_my_project$ touch README.md
+morris:~/Desktop/oh_my_project$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"# Oh My Project"</span> &gt;&gt; README.md 
+morris:~/Desktop/oh_my_project$ git init
+Initialized empty Git repository <span class="hljs-keyword">in</span> /home/maoshengrong/Desktop/oh_my_project/.git/
+
+morris:~/Desktop/oh_my_project$ git status
+On branch master
+Initial commit
+Untracked files:
+  (use <span class="hljs-string">"git add &lt;file&gt;..."</span> to include <span class="hljs-keyword">in</span> what will be committed)
+        README.md
+nothing added to commit but untracked files present (use <span class="hljs-string">"git add"</span> to track)
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-background-color="#E0E0E0" data-paginate="true" data-header="Add and Commit to Git 📢" data-theme="uncover" data-marpit-pagination="10" style="--background-color:#E0E0E0;--paginate:true;--header:Add and Commit to Git 📢;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header>Add and Commit to Git <img class="emoji" draggable="false" alt="📢" src="https://twemoji.maxcdn.com/2/svg/1f4e2.svg" data-marp-twemoji=""/></header>
+<pre><code class="language-bash">morris:~/Desktop/oh_my_project$ git add README.md 
+morris:~/Desktop/oh_my_project$ git status
+On branch master
+Initial commit
+Changes to be committed:
+  (use <span class="hljs-string">"git rm --cached &lt;file&gt;..."</span> to unstage)
+        new file:   README.md
+
+morris:~/Desktop/oh_my_project$ git commit -m <span class="hljs-string">"add README.md"</span>
+[master (root-commit) b8ab76f] add README.md
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+
+morris:~/Desktop/oh_my_project$ git status
+On branch master
+nothing to commit, working directory clean
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="Create Repository on Remote 🏭" data-theme="uncover" data-marpit-pagination="11" style="--background-color:#E0E0E0;--paginate:true;--header:Create Repository on Remote 🏭;--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="background"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/create_repo1.png&quot;);background-size:90%;"></figure><figure style="background-image:url(&quot;assets/create_repo2.png&quot;);background-size:80%;"></figure></div></section></foreignObject><foreignObject width="1280" height="720"><section id="11" data-background-color="#E0E0E0" data-paginate="true" data-header="Create Repository on Remote 🏭" data-theme="uncover" data-marpit-pagination="11" style="--background-color:#E0E0E0;--paginate:true;--header:Create Repository on Remote 🏭;--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="content">
+<header>Create Repository on Remote <img class="emoji" draggable="false" alt="🏭" src="https://twemoji.maxcdn.com/2/svg/1f3ed.svg" data-marp-twemoji=""/></header>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="11"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-marpit-scope-1wfwFLx2="" data-background-color="#E0E0E0" data-paginate="true" data-header="Push to Remote Repo 🚚" data-theme="uncover" data-marpit-pagination="12" style="--background-color:#E0E0E0;--paginate:true;--header:Push to Remote Repo 🚚;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header>Push to Remote Repo <img class="emoji" draggable="false" alt="🚚" src="https://twemoji.maxcdn.com/2/svg/1f69a.svg" data-marp-twemoji=""/></header>
+<pre><code class="language-bash">morris:~/Desktop/oh_my_project$ git remote add origin ssh://git@gitlab.espressif.cn:27227/srmao/oh-my-project.git
+morris:~/Desktop/oh_my_project$ git push -u origin master 
+Counting objects: 3, <span class="hljs-keyword">done</span>.
+Writing objects: 100% (3/3), 232 bytes | 0 bytes/s, <span class="hljs-keyword">done</span>.
+Total 3 (delta 0), reused 0 (delta 0)
+To ssh://git@gitlab.espressif.cn:27227/srmao/oh-my-project.git
+ * [new branch]      master -&gt; master
+Branch master <span class="hljs-built_in">set</span> up to track remote branch master from origin by rebasing.
+
+morris:~/Desktop/oh_my_project$ git status
+On branch master
+Your branch is up-to-date with <span class="hljs-string">'origin/master'</span>.
+nothing to commit, working directory clean
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-marpit-scope-1lXnkbMO="" data-background-color="#E0E0E0" data-paginate="true" data-header="New Branch 🌳" data-theme="uncover" data-marpit-pagination="13" style="--background-color:#E0E0E0;--paginate:true;--header:New Branch 🌳;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header>New Branch <img class="emoji" draggable="false" alt="🌳" src="https://twemoji.maxcdn.com/2/svg/1f333.svg" data-marp-twemoji=""/></header>
+<pre><code class="language-bash">morris:~/Desktop/oh_my_project$ git branch 
+* master
+morris:~/Desktop/oh_my_project$ git checkout -b <span class="hljs-string">"feature/update_readme"</span>
+Switched to a new branch <span class="hljs-string">'feature/update_readme'</span>
+
+morris:~/Desktop/oh_my_project$ git branch 
+* feature/update_readme
+  master
+</code></pre>
+<p><img class="emoji" draggable="false" alt="⏳" src="https://twemoji.maxcdn.com/2/svg/23f3.svg" data-marp-twemoji=""/> ... working on new branch ...</p>
+<pre><code class="language-bash">morris:~/Desktop/oh_my_project$ git push origin feature/update_readme 
+Counting objects: 3, <span class="hljs-keyword">done</span>.
+Writing objects: 100% (3/3), 298 bytes | 0 bytes/s, <span class="hljs-keyword">done</span>.
+Total 3 (delta 0), reused 0 (delta 0)
+To ssh://git@gitlab.espressif.cn:27227/srmao/oh-my-project.git
+ * [new branch]      feature/update_readme -&gt; feature/update_readme
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-marpit-scope-iecaxxv0="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Command Cheat Sheet 1 💯**" data-theme="uncover" data-marpit-pagination="14" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Command Cheat Sheet 1 💯**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Command Cheat Sheet 1 <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/></strong></header>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">init</td>
+<td style="text-align:left">initialize an empty repository</td>
+</tr>
+<tr>
+<td style="text-align:left">config</td>
+<td style="text-align:left">setup name, email, etc</td>
+</tr>
+<tr>
+<td style="text-align:left">add</td>
+<td style="text-align:left">add changes to staging area</td>
+</tr>
+<tr>
+<td style="text-align:left">rm</td>
+<td style="text-align:left">remove file from repository</td>
+</tr>
+<tr>
+<td style="text-align:left">rm --cached</td>
+<td style="text-align:left">remove file only from staging area</td>
+</tr>
+<tr>
+<td style="text-align:left">commit</td>
+<td style="text-align:left">commit the changes in staging area</td>
+</tr>
+<tr>
+<td style="text-align:left">clone</td>
+<td style="text-align:left">clone a remote repository to local</td>
+</tr>
+<tr>
+<td style="text-align:left">status</td>
+<td style="text-align:left">check status of current branch</td>
+</tr>
+</tbody>
+</table>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-marpit-scope-gnYMxRe4="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Command Cheat Sheet 2 💯**" data-theme="uncover" data-marpit-pagination="15" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Command Cheat Sheet 2 💯**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Command Cheat Sheet 2 <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/></strong></header>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">stash / stash pop</td>
+<td style="text-align:left">push / pop changes to / from stack area</td>
+</tr>
+<tr>
+<td style="text-align:left">mv</td>
+<td style="text-align:left">rename or move file</td>
+</tr>
+<tr>
+<td style="text-align:left">log</td>
+<td style="text-align:left">investigate the logs of commits</td>
+</tr>
+<tr>
+<td style="text-align:left">reflog</td>
+<td style="text-align:left">check history operation</td>
+</tr>
+<tr>
+<td style="text-align:left">push --tags</td>
+<td style="text-align:left">push the tag to remote repository</td>
+</tr>
+<tr>
+<td style="text-align:left">commit --amend</td>
+<td style="text-align:left">update the latest commit</td>
+</tr>
+<tr>
+<td style="text-align:left">commit --date</td>
+<td style="text-align:left">specify the commit date</td>
+</tr>
+<tr>
+<td style="text-align:left">checkout &lt;file&gt;</td>
+<td style="text-align:left">undo the modification of some file</td>
+</tr>
+</tbody>
+</table>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-marpit-scope-7PZP3irt="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Command Cheat Sheet 3 💯**" data-theme="uncover" data-marpit-pagination="16" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Command Cheat Sheet 3 💯**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Command Cheat Sheet 3 <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/></strong></header>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">reset &lt;file&gt;</td>
+<td style="text-align:left">un-stage some file</td>
+</tr>
+<tr>
+<td style="text-align:left">reset --soft</td>
+<td style="text-align:left">undo the last commit (keep the changes in staging area)</td>
+</tr>
+<tr>
+<td style="text-align:left">remote -v</td>
+<td style="text-align:left">check the url of remote repository</td>
+</tr>
+<tr>
+<td style="text-align:left">pull</td>
+<td style="text-align:left">pull changes from remote repository (auto-merge)</td>
+</tr>
+<tr>
+<td style="text-align:left">remote add</td>
+<td style="text-align:left">add a remote repository</td>
+</tr>
+<tr>
+<td style="text-align:left">diff &lt;file&gt;</td>
+<td style="text-align:left">find out changed lines in some file</td>
+</tr>
+<tr>
+<td style="text-align:left">tag</td>
+<td style="text-align:left">give the current commit a new tag</td>
+</tr>
+<tr>
+<td style="text-align:left">blame &lt;file&gt;</td>
+<td style="text-align:left">find out who introduced a bug <img class="emoji" draggable="false" alt="🤔" src="https://twemoji.maxcdn.com/2/svg/1f914.svg" data-marp-twemoji=""/></td>
+</tr>
+</tbody>
+</table>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-marpit-scope-kIpQDEpO="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Command Cheat Sheet 4 💯**" data-theme="uncover" data-marpit-pagination="17" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Command Cheat Sheet 4 💯**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Command Cheat Sheet 4 <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/></strong></header>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">branch</td>
+<td style="text-align:left">list all branches</td>
+</tr>
+<tr>
+<td style="text-align:left">branch &lt;nb&gt; &lt;hash&gt;</td>
+<td style="text-align:left">create a new branch based on some commit</td>
+</tr>
+<tr>
+<td style="text-align:left">branch -d &lt;name&gt;</td>
+<td style="text-align:left">delete a branch</td>
+</tr>
+<tr>
+<td style="text-align:left">branch -m &lt;name&gt;</td>
+<td style="text-align:left">rename a branch</td>
+</tr>
+<tr>
+<td style="text-align:left">checkout &lt;nb&gt;</td>
+<td style="text-align:left">switch to another branch</td>
+</tr>
+<tr>
+<td style="text-align:left">checkout -b &lt;nb&gt;</td>
+<td style="text-align:left">create a new branch and then switch to</td>
+</tr>
+<tr>
+<td style="text-align:left">checkout -</td>
+<td style="text-align:left">switch to last branch</td>
+</tr>
+<tr>
+<td style="text-align:left">checkout &lt;tag&gt;</td>
+<td style="text-align:left">switch to a specific tag</td>
+</tr>
+</tbody>
+</table>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-marpit-scope-f6vS1ZR1="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Command Cheat Sheet 5 💯**" data-theme="uncover" data-marpit-pagination="18" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Command Cheat Sheet 5 💯**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Command Cheat Sheet 5 <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/></strong></header>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">push &lt;remote&gt; &lt;branch&gt;</td>
+<td style="text-align:left">push a branch to remote repository</td>
+</tr>
+<tr>
+<td style="text-align:left">merge &lt;branch&gt;</td>
+<td style="text-align:left">merge another branch to current one</td>
+</tr>
+<tr>
+<td style="text-align:left">fetch</td>
+<td style="text-align:left">get changes from remote without merge</td>
+</tr>
+<tr>
+<td style="text-align:left">bisect</td>
+<td style="text-align:left">find out which commit introduced bug</td>
+</tr>
+<tr>
+<td style="text-align:left">cherry-pick &lt;hash&gt;</td>
+<td style="text-align:left">make use of the commits from others</td>
+</tr>
+<tr>
+<td style="text-align:left">rebase</td>
+<td style="text-align:left">rebase current branch onto another one</td>
+</tr>
+<tr>
+<td style="text-align:left">add &lt;file&gt; --edit</td>
+<td style="text-align:left">specify the lines to stage</td>
+</tr>
+<tr>
+<td style="text-align:left">revert</td>
+<td style="text-align:left">undo a commit which has been pushed to remote</td>
+</tr>
+</tbody>
+</table>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-marpit-scope-TozI6HxY="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Manual 👨‍🏫**" data-theme="uncover" data-marpit-pagination="19" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Manual 👨‍🏫**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:30%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="vertical"><figure style="background-image:url(&quot;https://fakeimg.pl/800x600/F48FB1/fff/?text=tldr&quot;);"></figure><figure style="background-image:url(&quot;https://fakeimg.pl/800x600/0288d1/fff/?text=man&quot;);"></figure></div></section></foreignObject><foreignObject width="70%" height="720" x="30%"><section id="19" data-marpit-scope-TozI6HxY="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Manual 👨‍🏫**" data-theme="uncover" data-marpit-pagination="19" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Manual 👨‍🏫**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:30%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Git Manual <img class="emoji" draggable="false" alt="👨‍🏫" src="https://twemoji.maxcdn.com/2/svg/1f468-200d-1f3eb.svg" data-marp-twemoji=""/></strong></header>
+<pre><code class="language-bash">$ tldr git-log
+  - Show the sequence of commits starting from the current one, <span class="hljs-keyword">in</span> reverse chronological order:
+    git <span class="hljs-built_in">log</span>
+  - Show the <span class="hljs-built_in">history</span> of a particular file or directory, including differences:
+    git <span class="hljs-built_in">log</span> -p path/to/file_or_directory
+  - Show only the first line of each commit message:
+    git <span class="hljs-built_in">log</span> --oneline
+  - Show an overview of <span class="hljs-built_in">which</span> file(s) changed <span class="hljs-keyword">in</span> each commit:
+    git <span class="hljs-built_in">log</span> --<span class="hljs-built_in">stat</span>
+  - Show a graph of commits <span class="hljs-keyword">in</span> the current branch:
+    git <span class="hljs-built_in">log</span> --graph
+  - Show a graph of all commits, tags and branches <span class="hljs-keyword">in</span> the entire repo:
+    git <span class="hljs-built_in">log</span> --oneline --decorate --all --graph
+  - Show only commits whose messages include a given string (<span class="hljs-keyword">case</span>-insensitively):
+    git <span class="hljs-built_in">log</span> -i --grep search_string
+</code></pre>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="19"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-marpit-scope-W4JDBwgp="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Alias 🔨**" data-theme="uncover" data-marpit-pagination="20" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Alias 🔨**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Alias <img class="emoji" draggable="false" alt="🔨" src="https://twemoji.maxcdn.com/2/svg/1f528.svg" data-marp-twemoji=""/></strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Set alias for common used commands in <strong>~/.gitconfig</strong> file</span></foreignObject></svg></h1>
+<pre><code>[alias]
+    gl = <span class="hljs-keyword">log</span> -n <span class="hljs-number">30</span> --date-order --<span class="hljs-keyword">format</span>=\<span class="hljs-string">"%Cgreen%h %Cred[%ci] %Creset &lt;%an&gt;%C(yellow)%d%Creset %Creset %Cgreen%s %Creset \"
+    hist = log --pretty=format:\"%C(yellow)%h %C(red)%d %C(reset)%s %C(green)[%an] %C(blue)%ad\" --topo-order --graph 
+    st = status -uno -s
+    st2 = status -s
+    co = checkout
+    bl = blame --date=short
+    ci = commit
+    dt = difftool
+    dif = diff --word-diff
+    di = diff --no-ext-diff  
+</span></code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Ignore**" data-theme="uncover" data-marpit-pagination="21" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Ignore**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Ignore</strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <em>ignore</em> = do not put the matched files to staging area</span></foreignObject></svg></h1>
+<h5><a href="https://gitlab.espressif.cn:6688/espressif/esp-idf/blob/master/.gitignore">.gitignore</a> in esp-idf <img class="emoji" draggable="false" alt="👇🏿" src="https://twemoji.maxcdn.com/2/svg/1f447-1f3ff.svg" data-marp-twemoji=""/></h5>
+<pre><code><span class="hljs-string">.config</span> <span class="hljs-comment"># ignore .config file</span>
+*<span class="hljs-string">.o</span> <span class="hljs-comment"># ignore all object file</span>
+*<span class="hljs-string">.pyc</span> <span class="hljs-comment"># ignore all python byte code file</span>
+examples/**<span class="hljs-string">/sdkconfig</span> <span class="hljs-comment"># ignore sdkconfig files inside examples</span>
+examples/**<span class="hljs-string">/build</span> <span class="hljs-comment"># ignore build directory inside examples</span>
+</code></pre>
+<pre><code><span class="hljs-comment"># ignore all .a files but lib.a</span>
+*.a
+!<span class="hljs-class"><span class="hljs-keyword">lib</span>.<span class="hljs-title">a</span></span>
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Submodule**" data-theme="uncover" data-marpit-pagination="22" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Submodule**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Submodule</strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <em>submodule</em> = 3rd party libraries/tools that reside in <em>another repository</em></span></foreignObject></svg></h1>
+<h5><a href="https://gitlab.espressif.cn:6688/espressif/esp-idf/blob/master/.gitmodules">.gitmodules</a> in esp-idf <img class="emoji" draggable="false" alt="👇🏿" src="https://twemoji.maxcdn.com/2/svg/1f447-1f3ff.svg" data-marp-twemoji=""/></h5>
+<pre><code>[submodule <span class="hljs-string">"components/esptool_py/esptool"</span>]
+    path = components/esptool_py/esptool
+    url = ../../espressif/esptool.git
+[submodule <span class="hljs-string">"components/esp_wifi/lib_esp32"</span>]
+    path = components/esp_wifi/lib_esp32
+    url = ../../espressif/esp32-wifi-<span class="hljs-class"><span class="hljs-keyword">lib</span>.<span class="hljs-title">git</span></span>
+</code></pre>
+<pre><code class="language-bash"><span class="hljs-comment"># after a fresh git clone, submodule needs update accordingly</span>
+git submodule update --init --recursive 
+<span class="hljs-comment"># add a new submodule</span>
+git submodule add &lt;submodule_url&gt; submodule_local_path
+</code></pre>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-marpit-scope-cDMT8Lkf="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Reorder Commits 🔁**" data-theme="uncover" data-marpit-pagination="23" style="--background-color:#E0E0E0;--paginate:true;--header:**Reorder Commits 🔁**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:70%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/reorder.gif&quot;);background-size:90%;"></figure></div></section></foreignObject><foreignObject width="30%" height="720" x="70%"><section id="23" data-marpit-scope-cDMT8Lkf="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Reorder Commits 🔁**" data-theme="uncover" data-marpit-pagination="23" style="--background-color:#E0E0E0;--paginate:true;--header:**Reorder Commits 🔁**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:70%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Reorder Commits <img class="emoji" draggable="false" alt="🔁" src="https://twemoji.maxcdn.com/2/svg/1f501.svg" data-marp-twemoji=""/></strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> What if the commits are <br /> in a wrong order <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+<pre><code class="language-bash">git rebase -i &lt;<span class="hljs-built_in">hash</span>&gt;
+</code></pre>
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <img class="emoji" draggable="false" alt="💣" src="https://twemoji.maxcdn.com/2/svg/1f4a3.svg" data-marp-twemoji=""/> <br /> possible conflict</span></foreignObject></svg></h1>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="23"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-marpit-scope-qcAdvBM6="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Squash Commits 📥**" data-theme="uncover" data-marpit-pagination="24" style="--background-color:#E0E0E0;--paginate:true;--header:**Squash Commits 📥**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:70%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/squash.gif&quot;);background-size:90%;"></figure></div></section></foreignObject><foreignObject width="30%" height="720" x="70%"><section id="24" data-marpit-scope-qcAdvBM6="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Squash Commits 📥**" data-theme="uncover" data-marpit-pagination="24" style="--background-color:#E0E0E0;--paginate:true;--header:**Squash Commits 📥**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:70%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Squash Commits <img class="emoji" draggable="false" alt="📥" src="https://twemoji.maxcdn.com/2/svg/1f4e5.svg" data-marp-twemoji=""/></strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> What if <br /> too many similar commits <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+<pre><code class="language-bash">git rebase -i &lt;<span class="hljs-built_in">hash</span>&gt;
+</code></pre>
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <img class="emoji" draggable="false" alt="💯" src="https://twemoji.maxcdn.com/2/svg/1f4af.svg" data-marp-twemoji=""/> <br /> squash before merge</span></foreignObject></svg></h1>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="24"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-background-color="#E0E0E0" data-background-image="linear-gradient(to bottom, #64B5F6, #0D47A1)" data-color="white" data-theme="uncover" style="--background-color:#E0E0E0;--background-image:linear-gradient(to bottom, #64B5F6, #0D47A1);--color:white;--theme:uncover;color:white;background-color:#E0E0E0;background-image:linear-gradient(to bottom, #64B5F6, #0D47A1);background-position:center;background-repeat:no-repeat;background-size:cover;">
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> <img class="emoji" draggable="false" alt="😮" src="https://twemoji.maxcdn.com/2/svg/1f62e.svg" data-marp-twemoji=""/> Still far from sufficient ......</span></foreignObject></svg></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Book Recommendation 📚**" data-theme="uncover" data-marpit-pagination="26" style="--background-color:#E0E0E0;--paginate:true;--header:**Book Recommendation 📚**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:60%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/progit.png&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="40%" height="720" x="60%"><section id="26" data-background-color="#E0E0E0" data-paginate="true" data-header="**Book Recommendation 📚**" data-theme="uncover" data-marpit-pagination="26" style="--background-color:#E0E0E0;--paginate:true;--header:**Book Recommendation 📚**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:60%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Book Recommendation <img class="emoji" draggable="false" alt="📚" src="https://twemoji.maxcdn.com/2/svg/1f4da.svg" data-marp-twemoji=""/></strong></header>
+
+<p><br />
+<a href="https://git-scm.com/book/en/v2">ProGit Book</a></p>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="26"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Learn Git the Easy Way 🍰**" data-theme="uncover" data-marpit-pagination="27" style="--background-color:#E0E0E0;--paginate:true;--header:**Learn Git the Easy Way 🍰**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/game.svg&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="60%" height="720" x="40%"><section id="27" data-background-color="#E0E0E0" data-paginate="true" data-header="**Learn Git the Easy Way 🍰**" data-theme="uncover" data-marpit-pagination="27" style="--background-color:#E0E0E0;--paginate:true;--header:**Learn Git the Easy Way 🍰**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Learn Git the Easy Way <img class="emoji" draggable="false" alt="🍰" src="https://twemoji.maxcdn.com/2/svg/1f370.svg" data-marp-twemoji=""/></strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Learn by Gaming -- <code>GitHug</code></span></foreignObject></svg></h1>
+<p><a href="https://githug.zhang-ou.com/">GitHug Walk Through Guide</a></p>
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Learn in interactive way</span></foreignObject></svg></h1>
+<p><a href="https://learngitbranching.js.org/">Learn Git Branching</a></p>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="27"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-background-color="#E0E0E0" data-background-image="linear-gradient(to bottom, #FF6D00, #FFAB40)" data-color="white" data-theme="uncover" style="--background-color:#E0E0E0;--background-image:linear-gradient(to bottom, #FF6D00, #FFAB40);--color:white;--theme:uncover;color:white;background-color:#E0E0E0;background-image:linear-gradient(to bottom, #FF6D00, #FFAB40);background-position:center;background-repeat:no-repeat;background-size:cover;">
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> Submit Merge Request in GitLab <img class="emoji" draggable="false" alt="🙌🏻" src="https://twemoji.maxcdn.com/2/svg/1f64c-1f3fb.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" data-marpit-scope-kKW0K1T4="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Branching Model of ESP-IDF 📏**" data-theme="uncover" data-marpit-pagination="29" style="--background-color:#E0E0E0;--paginate:true;--header:**Branching Model of ESP-IDF 📏**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Branching Model of ESP-IDF <img class="emoji" draggable="false" alt="📏" src="https://twemoji.maxcdn.com/2/svg/1f4cf.svg" data-marp-twemoji=""/></strong></header>
+
+<ul>
+<li><strong>master branch</strong> <img class="emoji" draggable="false" alt="👍🏾" src="https://twemoji.maxcdn.com/2/svg/1f44d-1f3fe.svg" data-marp-twemoji=""/>
+<ul>
+<li>Name: <code>master</code></li>
+<li>Where <em>integration</em> happens</li>
+<li>Always produce working code which compiles and passes CI tests</li>
+</ul>
+</li>
+<li><strong>feature and bugfix branches</strong> <img class="emoji" draggable="false" alt="🐞" src="https://twemoji.maxcdn.com/2/svg/1f41e.svg" data-marp-twemoji=""/>
+<ul>
+<li>Name: <code>feature/xxx</code> and <code>bugfix/xxx</code></li>
+<li>Where <em>development</em> happens</li>
+<li>May contain broken or incomplete or testing code</li>
+</ul>
+</li>
+<li><strong>release branches</strong> <img class="emoji" draggable="false" alt="💪🏽" src="https://twemoji.maxcdn.com/2/svg/1f4aa-1f3fd.svg" data-marp-twemoji=""/>
+<ul>
+<li>Name: <code>release/v4.0</code></li>
+<li>Where releases are maintained and bugfixes are backported</li>
+</ul>
+</li>
+</ul>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" data-marpit-scope-9niibZSG="" data-background-color="#E0E0E0" data-paginate="true" data-header="**Git Commit Message Practice 📬**" data-theme="uncover" data-marpit-pagination="30" style="--background-color:#E0E0E0;--paginate:true;--header:**Git Commit Message Practice 📬**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>Git Commit Message Practice <img class="emoji" draggable="false" alt="📬" src="https://twemoji.maxcdn.com/2/svg/1f4ec.svg" data-marp-twemoji=""/></strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> What a good commit message looks like <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+<pre><code class="language-bash">vfs/fatfs: fix <span class="hljs-built_in">stat</span> call failing when called <span class="hljs-keyword">for</span> mount point
+   
+FATFS does not support f_stat call <span class="hljs-keyword">for</span> drive root. When handling <span class="hljs-built_in">stat</span>
+<span class="hljs-keyword">for</span> drive root, don<span class="hljs-string">'t call f_stat and just return struct st with S_IFDIR
+flag set.
+
+Closes https://github.com/espressif/esp-idf/issues/984
+</span></code></pre>
+<ul>
+<li>First Line Rule: <code>component-name</code> <code>Add/Fix/Remove/Change</code> <code>THING</code>
+<ul>
+<li>esp32: Fix startup timeout issue <img class="emoji" draggable="false" alt="👌" src="https://twemoji.maxcdn.com/2/svg/1f44c.svg" data-marp-twemoji=""/></li>
+</ul>
+</li>
+<li>Detailed story after the first line
+<ul>
+<li>Full link to Github Issues or PRs: <code>Fixes https://github.com/espressif/esp-idf/issues/73</code></li>
+<li>Jira ticket number: <code>Closes IDF-123</code></li>
+</ul>
+</li>
+</ul>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#E0E0E0" data-paginate="true" data-header="**Development workflow**" data-theme="uncover" data-marpit-pagination="31" style="--background-color:#E0E0E0;--paginate:true;--header:**Development workflow**;--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="background"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/workflow.png&quot;);background-size:70%;"></figure></div></section></foreignObject><foreignObject width="1280" height="720"><section id="31" data-background-color="#E0E0E0" data-paginate="true" data-header="**Development workflow**" data-theme="uncover" data-marpit-pagination="31" style="--background-color:#E0E0E0;--paginate:true;--header:**Development workflow**;--theme:uncover;background-color:#E0E0E0;background-image:none;" data-marpit-advanced-background="content">
+<header><strong>Development workflow</strong></header>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="31"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-background-color="#E0E0E0" data-paginate="true" data-header="**MR Description**" data-theme="uncover" data-marpit-pagination="32" style="--background-color:#E0E0E0;--paginate:true;--header:**MR Description**;--theme:uncover;background-color:#E0E0E0;background-image:none;">
+<header><strong>MR Description</strong></header>
+
+<h1><svg data-marp-fitting="svg"><foreignObject><span data-marp-fitting-svg-content> What a good MR Description looks like <img class="emoji" draggable="false" alt="❓" src="https://twemoji.maxcdn.com/2/svg/2753.svg" data-marp-twemoji=""/></span></foreignObject></svg></h1>
+<p><img src="assets/mrdescription.svg" alt="w:700 h:500" style="width:700px;height:500px;" /></p>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-marpit-scope-VSwXiItl="" data-marpit-fragments="3" data-background-color="#E0E0E0" data-paginate="true" data-header="**MR/PR Etiquette 💁🏻‍♂️**" data-theme="uncover" data-marpit-pagination="33" style="--background-color:#E0E0E0;--paginate:true;--header:**MR/PR Etiquette 💁🏻‍♂️**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:30%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/etiquette.svg&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="70%" height="720" x="30%"><section id="33" data-marpit-scope-VSwXiItl="" data-marpit-fragments="3" data-background-color="#E0E0E0" data-paginate="true" data-header="**MR/PR Etiquette 💁🏻‍♂️**" data-theme="uncover" data-marpit-pagination="33" style="--background-color:#E0E0E0;--paginate:true;--header:**MR/PR Etiquette 💁🏻‍♂️**;--theme:uncover;background-color:#E0E0E0;background-image:none;--marpit-advanced-background-split:30%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>MR/PR Etiquette <img class="emoji" draggable="false" alt="💁🏻‍♂️" src="https://twemoji.maxcdn.com/2/svg/1f481-1f3fb-200d-2642-fe0f.svg" data-marp-twemoji=""/></strong></header>
+
+<h5>Community Etiquette</h5>
+
+<ul>
+<li data-marpit-fragment="1">Be <strong>polite</strong>, even if the code is not good</li>
+<li data-marpit-fragment="2">Try best to <strong>review</strong> PR/MR within 1 week of them being opened</li>
+<li data-marpit-fragment="3">If the MR looks good to you, don't forget to give a <strong>thumbup</strong> <img class="emoji" draggable="false" alt="👍" src="https://twemoji.maxcdn.com/2/svg/1f44d.svg" data-marp-twemoji=""/></li>
+</ul>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="" data-marpit-advanced-background="pseudo" data-marpit-pagination="33"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#000123" data-paginate="true" data-header="**Other Useful Links**" data-theme="uncover" data-color="#FFFFFF" data-marpit-pagination="34" style="--background-color:#000123;--paginate:true;--header:**Other Useful Links**;--theme:uncover;--color:#FFFFFF;color:#FFFFFF;background-color:#000123;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/link.svg&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="60%" height="720" x="40%"><section id="34" data-background-color="#000123" data-paginate="true" data-header="**Other Useful Links**" data-theme="uncover" data-color="#FFFFFF" data-marpit-pagination="34" style="--background-color:#000123;--paginate:true;--header:**Other Useful Links**;--theme:uncover;--color:#FFFFFF;color:#FFFFFF;background-color:#000123;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>Other Useful Links</strong></header>
+
+<ul>
+<li><a href="https://gitlab.espressif.cn:6688/espressif/esp-idf/wikis/home">ESP-IDF Internal Wiki</a></li>
+<li><a href="https://sourcegraph.com/github.com/espressif/esp-idf">Sourcegraph</a></li>
+<li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/index.html">Read The Docs</a></li>
+</ul>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="color:#FFFFFF;" data-marpit-advanced-background="pseudo" data-marpit-pagination="34"></section></foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section data-background-color="#000123" data-paginate="true" data-header="**QA**" data-theme="uncover" data-color="#FFFFFF" data-marpit-pagination="35" style="--background-color:#000123;--paginate:true;--header:**QA**;--theme:uncover;--color:#FFFFFF;color:#FFFFFF;background-color:#000123;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="background" data-marpit-advanced-background-split="left"><div data-marpit-advanced-background-container="true" data-marpit-advanced-background-direction="horizontal"><figure style="background-image:url(&quot;assets/question_answer.svg&quot;);background-size:auto;"></figure></div></section></foreignObject><foreignObject width="60%" height="720" x="40%"><section id="35" data-background-color="#000123" data-paginate="true" data-header="**QA**" data-theme="uncover" data-color="#FFFFFF" data-marpit-pagination="35" style="--background-color:#000123;--paginate:true;--header:**QA**;--theme:uncover;--color:#FFFFFF;color:#FFFFFF;background-color:#000123;background-image:none;--marpit-advanced-background-split:40%;" data-marpit-advanced-background="content" data-marpit-advanced-background-split="left">
+<header><strong>QA</strong></header>
+
+<p><a href="https://gitlab.espressif.cn:6688/srmao/morris_training">Source File of This Slide</a></p>
+</section>
+</foreignObject><foreignObject width="1280" height="720" data-marpit-advanced-background="pseudo"><section style="color:#FFFFFF;" data-marpit-advanced-background="pseudo" data-marpit-pagination="35"></section></foreignObject></svg></article><script>!function(){"use strict";const t=()=>"Apple Computer, Inc."===navigator.vendor?[e]:[];function e(t){Array.from(document.getElementsByTagName("svg"),e=>{if(e.hasAttribute("data-marpit-svg")){const{clientHeight:r,clientWidth:a}=e;e.style.transform||(e.style.transform="translateZ(0)");const i=t||e.currentScale||1,n=e.viewBox.baseVal.width/i,s=e.viewBox.baseVal.height/i,o=Math.min(r/s,a/n);Array.from(e.querySelectorAll(":scope > foreignObject"),t=>{const e=t.x.baseVal.value,i=t.y.baseVal.value;Array.from(t.querySelectorAll(":scope > section"),t=>{t.style.transformOrigin||(t.style.transformOrigin="0 0");const l=(a-o*n)/2-e,c=(r-o*s)/2-i;t.style.transform=`translate3d(${l}px,${c}px,0) scale(${o}) translate(${e}px,${i}px)`})})}})}const r="data-marp-fitting",a="data-marp-fitting-code",i="data-marp-fitting-math",n=(t,e,r)=>{if(t.getAttribute(e)!==r)return t.setAttribute(e,r),!0};!function(e=!0){const s=()=>{for(const e of t())e();Array.from(document.querySelectorAll(`svg[${r}="svg"]`),t=>{const e=t.firstChild,r=e.firstChild,{scrollWidth:s,scrollHeight:o}=r;let l,c=1;if(t.hasAttribute(a)&&(l=t.parentElement.parentElement),t.hasAttribute(i)&&(l=t.parentElement),l){const t=getComputedStyle(l),e=Math.ceil(l.clientWidth-parseFloat(t.paddingLeft)-parseFloat(t.paddingRight));e&&(c=e)}const m=Math.max(s,c),p=Math.max(o,1),g=`0 0 ${m} ${p}`;n(e,"width",`${m}`),n(e,"height",`${p}`),n(t,"preserveAspectRatio",getComputedStyle(t).getPropertyValue("--preserve-aspect-ratio")||"xMinYMin meet"),n(t,"viewBox",g)&&t.classList.toggle("__reflow__")}),e&&window.requestAnimationFrame(s)};s()}()}();
+</script><script>!function(){"use strict";var e={from:function(e,t){var n=1===(e.parent||e).nodeType?e.parent||e:document.querySelector(e.parent||e),r=[].filter.call("string"==typeof e.slides?n.querySelectorAll(e.slides):e.slides||n.children,function(e){return"SCRIPT"!==e.nodeName}),i=r[0],l={},s=function(e,t){r[e]&&(c("deactivate",u(i,t)),i=r[e],c("activate",u(i,t)))},o=function(e,t){var n=r.indexOf(i)+e;c(e>0?"next":"prev",u(i,t))&&s(n,t)},a=function(e,t){l[e]=(l[e]||[]).filter(function(e){return e!==t})},c=function(e,t){return(l[e]||[]).reduce(function(e,n){return e&&!1!==n(t)},!0)},u=function(e,t){return(t=t||{}).index=r.indexOf(e),t.slide=e,t},d={on:function(e,t){return(l[e]||(l[e]=[])).push(t),a.bind(null,e,t)},off:a,fire:c,slide:function(e,t){if(!arguments.length)return r.indexOf(i);c("slide",u(r[e],t))&&s(e,t)},next:o.bind(null,1),prev:o.bind(null,-1),parent:n,slides:r};return(t||[]).forEach(function(e){e(d)}),s(0),d}},t=function(){return function(e){e.slides.forEach(function(e){e.addEventListener("keydown",function(e){(/INPUT|TEXTAREA|SELECT/.test(e.target.nodeName)||"true"===e.target.contentEditable)&&e.stopPropagation()})})}};function n(e){e.parent.classList.add("bespoke-marp-parent"),e.slides.map(e=>e.classList.add("bespoke-marp-slide")),e.on("activate",t=>{e.slides.map(e=>e.classList.remove("bespoke-marp-active")),t.slide.classList.add("bespoke-marp-active")})}function r(e=2e3){return t=>{let n;function r(){n&&clearTimeout(n),n=setTimeout(()=>{t.parent.classList.add("bespoke-marp-inactive")},e),t.parent.classList.remove("bespoke-marp-inactive")}document.addEventListener("mousedown",r),document.addEventListener("mousemove",r),document.addEventListener("touchend",r),setTimeout(r,0)}}function i(e){let t=0,n=0;const r=e.slides.map(e=>[null,...e.querySelectorAll("[data-marpit-fragment]")]),i=e=>void 0!==r[t][n+e],l=(i,l)=>{t=i,n=l,r.forEach((e,t)=>{e.forEach((e,n)=>{if(null==e)return;const r=t<i||t===i&&n<=l;e.setAttribute("data-bespoke-marp-fragment",r?"active":"inactive"),t===i&&n===l?e.setAttribute("data-bespoke-marp-current-fragment","current"):e.removeAttribute("data-bespoke-marp-current-fragment")})}),e.fire("fragment",{slide:e.slides[i],index:i,fragments:r[i],fragmentIndex:l})};e.on("next",()=>{if(i(1))return l(t,n+1),!1;const e=t+1;r[e]&&l(e,0)}),e.on("prev",()=>{if(i(-1))return l(t,n-1),!1;const e=t-1;r[e]&&l(e,r[e].length-1)}),e.on("slide",({index:e,fragment:t})=>{let n=0;if(void 0!==t){const i=r[e];if(i){const{length:e}=i;n=-1===t?e-1:Math.min(Math.max(t,0),e-1)}}l(e,n)}),l(0,0)}var l,s,o=(function(e){!function(){var t="undefined"!=typeof window&&void 0!==window.document?window.document:{},n=e.exports,r="undefined"!=typeof Element&&"ALLOW_KEYBOARD_INPUT"in Element,i=function(){for(var e,n=[["requestFullscreen","exitFullscreen","fullscreenElement","fullscreenEnabled","fullscreenchange","fullscreenerror"],["webkitRequestFullscreen","webkitExitFullscreen","webkitFullscreenElement","webkitFullscreenEnabled","webkitfullscreenchange","webkitfullscreenerror"],["webkitRequestFullScreen","webkitCancelFullScreen","webkitCurrentFullScreenElement","webkitCancelFullScreen","webkitfullscreenchange","webkitfullscreenerror"],["mozRequestFullScreen","mozCancelFullScreen","mozFullScreenElement","mozFullScreenEnabled","mozfullscreenchange","mozfullscreenerror"],["msRequestFullscreen","msExitFullscreen","msFullscreenElement","msFullscreenEnabled","MSFullscreenChange","MSFullscreenError"]],r=0,i=n.length,l={};r<i;r++)if((e=n[r])&&e[1]in t){for(r=0;r<e.length;r++)l[n[0][r]]=e[r];return l}return!1}(),l={change:i.fullscreenchange,error:i.fullscreenerror},s={request:function(e){return new Promise(function(n){var l=i.requestFullscreen,s=function(){this.off("change",s),n()}.bind(this);e=e||t.documentElement,/ Version\/5\.1(?:\.\d+)? Safari\//.test(navigator.userAgent)?e[l]():e[l](r?Element.ALLOW_KEYBOARD_INPUT:{}),this.on("change",s)}.bind(this))},exit:function(){return new Promise(function(e){if(this.isFullscreen){var n=function(){this.off("change",n),e()}.bind(this);t[i.exitFullscreen](),this.on("change",n)}else e()}.bind(this))},toggle:function(e){return this.isFullscreen?this.exit():this.request(e)},onchange:function(e){this.on("change",e)},onerror:function(e){this.on("error",e)},on:function(e,n){var r=l[e];r&&t.addEventListener(r,n,!1)},off:function(e,n){var r=l[e];r&&t.removeEventListener(r,n,!1)},raw:i};i?(Object.defineProperties(s,{isFullscreen:{get:function(){return Boolean(t[i.fullscreenElement])}},element:{enumerable:!0,get:function(){return t[i.fullscreenElement]}},enabled:{enumerable:!0,get:function(){return Boolean(t[i.fullscreenEnabled])}}}),n?(e.exports=s,e.exports.default=s):window.screenfull=s):n?e.exports=!1:window.screenfull=!1}()}(l={exports:{}},l.exports),l.exports);function a(e){e.fullscreen=()=>o&&o.toggle(document.body),document.addEventListener("keydown",t=>{70!==t.which&&122!==t.which||t.altKey||t.ctrlKey||t.metaKey||!o||!o.enabled||(e.fullscreen(),t.preventDefault())})}function c(e={}){const t=Object.assign({history:!0},e);return e=>{function n(){const t=parseInt(window.location.hash.slice(1),10);Number.isNaN(t)||function(t){const n=Math.max(0,Math.min(t,e.slides.length-1));n!==e.slide()&&e.slide(n)}(t-1)}setTimeout(()=>{n(),e.on("activate",e=>{t.history?window.location.hash=e.index+1:window.location.replace(`#${e.index+1}`)}),window.addEventListener("hashchange",n)},0)}}function u(e={}){const t=Object.assign({interval:200},e);return e=>{document.addEventListener("keydown",t=>{(32===t.which&&t.shiftKey||33===t.which||37===t.which||38===t.which)&&e.prev(),(32===t.which&&!t.shiftKey||34===t.which||39===t.which||40===t.which)&&e.next(),35===t.which&&e.slide(e.slides.length-1,{fragment:-1}),36===t.which&&e.slide(0)});let n,r,i=0;e.parent.addEventListener("wheel",l=>{let o=!1;const a=(e,t)=>{e&&(o=o||function(e,t){return function(e,t){const n=t===s.X?"Width":"Height";return e[`client${n}`]<e[`scroll${n}`]}(e,t)&&function(e,t){const{overflow:n}=e,r=e[`overflow${t}`];return"auto"===n||"scroll"===n||"auto"===r||"scroll"===r}(getComputedStyle(e),t)}(e,t)),e&&e.parentElement&&a(e.parentElement,t)};if(0!==l.deltaX&&a(l.target,s.X),0!==l.deltaY&&a(l.target,s.Y),o)return;l.preventDefault(),r&&clearTimeout(r),r=setTimeout(()=>{n=0},t.interval);const c=Date.now()-i<t.interval,u=Math.sqrt(Math.pow(l.deltaX,2)+Math.pow(l.deltaY,2)),d=u<=n;if(n=u,c||d)return;let f;(l.deltaX>0||l.deltaY>0)&&(f="next"),(l.deltaX<0||l.deltaY<0)&&(f="prev"),f&&(e[f](),i=Date.now())})}}function d(e=".bespoke-marp-osc"){const t=document.querySelector(e);if(!t)return()=>{};const n=(e,n)=>{t.querySelectorAll(`[data-bespoke-marp-osc=${JSON.stringify(e)}]`).forEach(n)};return o&&!o.enabled&&n("fullscreen",e=>e.style.display="none"),e=>{t.addEventListener("click",t=>{if(t.target instanceof HTMLElement)switch(t.target.dataset.bespokeMarpOsc){case"next":e.next();break;case"prev":e.prev();break;case"fullscreen":"function"==typeof e.fullscreen&&o&&o.enabled&&e.fullscreen()}}),e.parent.appendChild(t),e.on("activate",({index:t})=>{n("page",n=>n.textContent=`Page ${t+1} of ${e.slides.length}`)}),e.on("fragment",({index:t,fragments:r,fragmentIndex:i})=>{n("prev",e=>e.disabled=0===t&&0===i),n("next",n=>n.disabled=t===e.slides.length-1&&i===r.length-1)}),o&&o.onchange(()=>n("fullscreen",e=>e.classList.toggle("exit",o&&o.isFullscreen)))}}!function(e){e.X="X",e.Y="Y"}(s||(s={}));const f=".bespoke-progress-bar";function h(e){e.on("activate",t=>{document.querySelectorAll(f).forEach(n=>{n.style.flexBasis=`${100*t.index/(e.slides.length-1)}%`})})}function m(e={}){const t=Object.assign({slope:Math.tan(-35*Math.PI/180),swipeThreshold:30},e);return e=>{let n;const r=e.parent,i=e=>{const t=r.getBoundingClientRect();return{x:e.pageX-(t.left+t.right)/2,y:e.pageY-(t.top+t.bottom)/2}};r.addEventListener("touchstart",e=>{n=1===e.touches.length?i(e.touches[0]):void 0}),r.addEventListener("touchmove",e=>{if(n)if(1===e.touches.length){e.preventDefault();const t=i(e.touches[0]),r=t.x-n.x,l=t.y-n.y;n.delta=Math.sqrt(Math.pow(Math.abs(r),2)+Math.pow(Math.abs(l),2)),n.radian=Math.atan2(r,l)}else n=void 0}),r.addEventListener("touchend",r=>{if(n){if(n.delta&&n.delta>=t.swipeThreshold){let i=n.radian-t.slope;i=(i+Math.PI)%(2*Math.PI)-Math.PI,e[i<0?"next":"prev"](),r.stopPropagation()}n=void 0}})}}e.from(document.getElementById("presentation"),[t(),n,r(),c({history:!1}),u(),a,h,m(),d(),i])}();
+</script></body></html>
