@@ -944,7 +944,7 @@ Closes https://github.com/espressif/esp-idf/issues/984
 
 ---
 <!-- _header: "**Git GUI**" -->
-<!-- _footer: "**[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/)**" -->
+<!-- _footer: "**[SmartGit](https://www.syntevo.com/smartgit/) 💗 [Sourcetree](https://www.sourcetreeapp.com/) 💗 [Lazygit](https://github.com/jesseduffield/lazygit)**" -->
 <!-- _backgroundImage: url('./assets/hero-background.jpg') -->
 
 ![bg fit](assets/smartgit.png)
